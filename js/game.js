@@ -8,7 +8,7 @@ let app = new PIXI.Application({
     width: 256,         // default: 800
     height: 256,        // default: 600
     antialias: true,    // default: false
-    transparent: false, // default: false
+    transparent: true, // default: false
     resolution: 1       // default: 1
 });
 
@@ -26,10 +26,17 @@ let background;
 let tree;
 let man;
 let message;
+let scrolls = [];
+
+let scrollTimer = 0;
+let scrollSpawn = 300; // 300 = 5 seconds
 
 PIXI.loader
 .add("assets/images/background.png")
 .add("assets/images/tree.png")
+.add("assets/images/tree.json")
+.add("assets/images/scroll.png")
+.add("assets/images/scroll.json")
 .add("assets/images/man.png")
 .load(setup);
 
@@ -46,10 +53,41 @@ function setup() {
         right = keyboard("ArrowRight"),
         down = keyboard("ArrowDown");
 
-    //background = new PIXI.Sprite(PIXI.loader.resources["assets/images/background.png"].texture);
-    tree = new PIXI.Sprite(PIXI.loader.resources["assets/images/tree.png"].texture);
-    tree.x = 300;//Math.floor(Math.random() * 500);
-    tree.y = 300;//Math.floor(Math.random() * 500);
+    background = new PIXI.Sprite(PIXI.loader.resources["assets/images/background.png"].texture);
+    app.stage.addChild(background);
+
+    //Make the trees
+    let numberOfTrees = 9,
+    spacing = 70,
+    xPositions = [0, 850, 0, 850];
+    xIndex = 0;
+    yPositions = [0, 100, 200, 0, 100, 200, 500, 600, 700, 500, 600, 700];
+    sheet = PIXI.loader.resources["assets/images/tree.json"].spritesheet;
+    for (r = 0; r < yPositions.length; r++) {
+        for (let i = 0; i < numberOfTrees; i++) {
+            tree = new PIXI.extras.AnimatedSprite(sheet.animations["tree"]);
+    
+            tree.scale.x = 1.2;
+            tree.scale.y = 1.2;
+    
+            let x = xPositions[xIndex] + (spacing * i);
+            let y = yPositions[r] + randomInt(0,60);
+    
+            tree.x = x;
+            tree.y = y;
+    
+            tree.animationSpeed = 0.1;
+            
+            setTimeout(function(tree){
+                tree.play();
+            }, randomInt(1, 200), tree);
+    
+            app.stage.addChild(tree);
+        }
+        if (r % 3 == 0)
+            xIndex++;
+    }
+
 
     man = new PIXI.Sprite(PIXI.loader.resources["assets/images/man.png"].texture);
     man.vx = 0;
@@ -108,7 +146,7 @@ function setup() {
         }
     };
 
-    app.stage.addChild(tree, man, message);
+    //app.stage.addChild(man);
 }
 
 function gameLoop(delta){
@@ -117,15 +155,131 @@ function gameLoop(delta){
 }
 
 function play(delta) {
+    // Update 
+    scrollTimer += delta;
+
     //Use the cat's velocity to make it move
     man.x += man.vx;
-    man.y += man.vy
+    man.y += man.vy;
+
+    if (scrollTimer >= scrollSpawn) {
+        spawnScroll();
+    }
+
+    scrolls.forEach(function(scroll) {
+        //console.log(scroll.x)
+        //Move the scroll
+        scroll.x += scroll.vx;
+        scroll.y += scroll.vy;
+
+        if (scroll.x >= 150)
+            scroll.vy = 0.05;
+        if (scroll.x >= 350)
+            scroll.vy = -0.05;
+        if (scroll.x >= 500)
+            scroll.vy = 0;
+        
+        //Check the scroll's screen boundaries
+        let scrollHitsWall = contain(scroll, {x: 28, y: 10, width: background.width, height: background.height});
+        
+        //If the scroll hits the top or bottom of the stage, reverse
+        //its direction
+        if (scrollHitsWall === "right" || scrollHitsWall === "left") {
+            scroll.vx *= -1;
+        }
+    });
 
     if (hitTestRectangle(man, tree)) {
         message.text = "Hit!"
     } else {
         message.text = "Miss!"
     }
+}
+
+/*******************/
+/* Spawns Scroll   */
+/*******************/
+function spawnScroll() {
+    // Reset the scroll timer
+    scrollTimer = 0;
+
+    // Load resources and create sprite
+    sheet = PIXI.loader.resources["assets/images/scroll.json"].spritesheet;
+    sheet = PIXI.loader.resources["assets/images/scroll.json"].spritesheet;
+    scroll = new PIXI.extras.AnimatedSprite(sheet.animations["scroll"]);
+
+    // Scale scroll to correct size
+    scroll.scale.x = 0.3;
+    scroll.scale.y = 0.3;
+
+    // Spawn location
+    scroll.x = 0;
+    scroll.y = 410;
+
+    // Initial speeds
+    scroll.vx = 0.3;
+    scroll.vy = -0.1;
+
+    // Start the animation
+    scroll.animationSpeed = 0.3;
+    scroll.play();
+
+    // Store scroll into the collection
+    scrolls.push(scroll);
+
+    // Add to the scene
+    app.stage.addChild(scroll);
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+//The `randomInt` helper function
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function contain(sprite, container) {
+
+    let collision = undefined;
+
+    //Left
+    if (sprite.x < container.x) {
+        sprite.x = container.x;
+        collision = "left";
+    }
+
+    //Top
+    if (sprite.y < container.y) {
+        sprite.y = container.y;
+        collision = "top";
+    }
+
+    //Right
+    if (sprite.x + sprite.width > container.width) {
+        sprite.x = container.width - sprite.width;
+        collision = "right";
+    }
+
+    //Bottom
+    if (sprite.y + sprite.height > container.height) {
+        sprite.y = container.height - sprite.height;
+        collision = "bottom";
+    }
+
+    //Return the `collision` value
+    return collision;
 }
 
 function keyboard(value) {
