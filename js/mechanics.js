@@ -3,6 +3,9 @@ function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
 function contain(sprite, container) {
 
     let collision = undefined;
@@ -34,6 +37,15 @@ function contain(sprite, container) {
     //Return the `collision` value
     return collision;
 }
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+//Capture the keyboard arrow keys
+let left = keyboard("ArrowLeft"),
+up = keyboard("ArrowUp"),
+right = keyboard("ArrowRight"),
+down = keyboard("ArrowDown");
 
 function keyboard(value) {
     let key = {};
@@ -81,6 +93,9 @@ function keyboard(value) {
     
     return key;
 }
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 function hitTestRectangle(r1, r2) {
     //Define the variables we'll need to calculate
