@@ -3,7 +3,7 @@ let dead = false;
 
 // Globals
 let background;
-let hit;
+let hits = [];
 let healthBar;
 
 // Character info
@@ -14,7 +14,23 @@ let killPoints = 0;
 // Scrolls info
 let scrolls = [];       // Array to hold all active scrolls
 let scrollTimer = 0;    // Timer to track when to spawn
-let scrollSpawn = 300;  // 300 = 5 seconds
+let scrollSpawn = 100;  // 300 = 5 seconds
+
+/////////////////
+
+let bumpers = [];
+
+function Bumper(sprite, direction) {
+    this.sprite = sprite;
+    this.direction = direction;
+}
+
+Bumper.prototype.getSprite = function(){
+    return this.sprite;
+}
+Bumper.prototype.getDirection = function(){
+    return this.direction;
+}
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -52,6 +68,7 @@ PIXI.loader
 .add("assets/images/scroll.json")
 .add("assets/images/hit.png")
 .add("assets/images/character.png")
+.add("assets/images/bumper.png")
 .load(setup);
 
 //////////////////////////////////////////////////////////
@@ -69,6 +86,9 @@ function setup() {
     background.height = window.innerHeight;
     background.width = background.height;
     app.stage.addChild(background);
+
+    // Spawn bumpers
+    spawnBumpers();
 
     //Make the trees
     spawnTree(20, 350);
@@ -88,11 +108,43 @@ function setup() {
         hit.x = 428;
         hit.y = 448;
         app.stage.addChild(hit);
+        if (hits.length != 0) {
+            hits.forEach(function(hit) {
+                app.stage.removeChild(hit);
+            });
+            hits = [];
+        }
+        hits.push(hit);
     };
     left.release = () => {
         // Remove the hitbox
-        app.stage.removeChild(hit);
-        hit = null;
+        hits.forEach(function(hit) {
+            app.stage.removeChild(hit);
+        });
+        hits = [];
+    };
+
+    //Right
+    right.press = () => {
+        // Spawn hitbox
+        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
+        hit.x = 498;
+        hit.y = 448;
+        app.stage.addChild(hit);
+        if (hits.length != 0) {
+            hits.forEach(function(hit) {
+                app.stage.removeChild(hit);
+            });
+            hits = [];
+        }
+        hits.push(hit);
+    };
+    right.release = () => {
+        // Remove the hitbox
+        hits.forEach(function(hit) {
+            app.stage.removeChild(hit);
+        });
+        hits = [];
     };
 
     /*
@@ -107,16 +159,6 @@ function setup() {
         }
     };
 
-    //Right
-    right.press = () => {
-        man.vx = 5;
-        man.vy = 0;
-    };
-    right.release = () => {
-        if (!left.isDown && man.vy === 0) {
-            man.vx = 0;
-        }
-    };
 
     //Down
     down.press = () => {
@@ -161,32 +203,39 @@ function play(delta) {
             
             //console.log(scroll.y);
 
-            if (scroll.x >= 115) {
-                scroll.vx = 0;
-                scroll.vy = -0.4;
-            }
-            if (scroll.y < 370 && scroll.y > 369) {
-                scroll.vx = 0.4;
-                scroll.vy = 0;
-            }
-            if (scroll.x > 250) {
-                scroll.vx = 0;
-                scroll.vy = 0.4;
-
-                if (scroll.y > 435  && scroll.y < 436) {
-                    scroll.vx = 0.4;
-                    scroll.vy = 0;
+            bumpers.forEach(function(bumper) {
+                if ( hitTestRectangle(scroll, bumper.getSprite()) ) {
+                    if (bumper.getDirection() == "up") {
+                        scroll.vx = 0;
+                        scroll.vy = -0.4;
+                    }
+                    if (bumper.getDirection() == "down") {
+                        scroll.vx = 0;
+                        scroll.vy = 0.4;
+                    }
+                    if (bumper.getDirection() == "left") {
+                        scroll.vx = -0.4;
+                        scroll.vy = 0;
+                    }
+                    if (bumper.getDirection() == "right") {
+                        scroll.vx = 0.4;
+                        scroll.vy = 0;
+                    }
                 }
-            }
-            
+            });
 
             // Scroll death by player
-            if (hit != null && hitTestRectangle(scroll, hit)) {
+            if (hits.length != 0 && hitTestRectangle(scroll, hit)) {
                 index = scrolls.indexOf(scroll);    // Locate scroll in question
                 app.stage.removeChild(scroll);      
                 if (index > -1) {
                     scrolls.splice(index, 1); 
                 }
+
+                hits.forEach(function(hit) {
+                    app.stage.removeChild(hit);
+                });
+                hits = [];
                 
                 // Increment kill points and publish
                 killPoints++;
@@ -232,6 +281,7 @@ function spawnCharacter() {
 /*******************/
 /* Spawns Scroll   */
 /*******************/
+let flipper = 0;
 function spawnScroll() {
     // Reset the scroll timer
     scrollTimer = 0;
@@ -245,13 +295,24 @@ function spawnScroll() {
     scroll.scale.x = 0.2;
     scroll.scale.y = 0.2;
 
-    // Spawn location
-    scroll.x = 0;
-    scroll.y = 435;
+    if (flipper == 0) {
+        // Spawn location
+        scroll.x = 0;
+        scroll.y = 435;
 
-    // Initial speeds
-    scroll.vx = 0.4;
-    scroll.vy = 0;
+        // Initial speeds
+        scroll.vx = 0.4;
+        scroll.vy = 0;
+    }
+    if (flipper == 1) {
+        // Spawn location
+        scroll.x = background.width - 50;
+        scroll.y = 435;
+
+        // Initial speeds
+        scroll.vx = -0.4;
+        scroll.vy = 0;
+    }
 
     // Start the animation
     scroll.animationSpeed = 0.3;
@@ -262,6 +323,10 @@ function spawnScroll() {
 
     // Add to the scene
     app.stage.addChild(scroll);
+
+    flipper++;
+    if (flipper == 2)
+        flipper = 0;
 }
 
 function spawnTree(x, y) {
@@ -307,4 +372,23 @@ function createHealthBar() {
     healthBar.addChild(outerBar);
 
     healthBar.outer = outerBar;
+}
+
+/*********************/
+/* Spawn Bumpers     */
+/*********************/
+function spawnBumpers() {
+    createBumper("up", 160, 445);
+    createBumper("right", 115, 325);
+    createBumper("down", 295, 380);
+    createBumper("right", 245, 500);
+}
+
+function createBumper(direction, x, y) {
+    bumper = new PIXI.Sprite(PIXI.loader.resources["assets/images/bumper.png"].texture);
+    bumper.x = x;
+    bumper.y = y;
+    app.stage.addChild(bumper);
+    bumperObject = new Bumper(bumper, direction);
+    bumpers.push(bumperObject);
 }
