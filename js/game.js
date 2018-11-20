@@ -3,13 +3,13 @@ let dead = false;
 
 // Globals
 let background;
-
 let hit;
 let healthBar;
 
 // Character info
 let character;
 let characterHealth = 100;
+let killPoints = 0;
 
 // Scrolls info
 let scrolls = [];       // Array to hold all active scrolls
@@ -41,7 +41,7 @@ app.renderer.autoResize = true;
 app.renderer.resize(window.innerWidth, window.innerHeight);
 
 //Add the canvas that Pixi automatically created for you to the HTML document
-document.body.appendChild(app.view);
+document.getElementById('game').appendChild(app.view);
 
 // Load assets
 PIXI.loader
@@ -156,7 +156,7 @@ function play(delta) {
             scroll.x += scroll.vx;
             scroll.y += scroll.vy;
             
-            console.log(scroll.y);
+            //console.log(scroll.y);
 
             if (scroll.x >= 115) {
                 scroll.vx = 0;
@@ -184,6 +184,8 @@ function play(delta) {
                 if (index > -1) {
                     scrolls.splice(index, 1);
                 }
+                killPoints++;
+                $('#killPoints').text("Kill Points: " + killPoints);
             }
             if (hitTestRectangle(scroll, character)) {
                 index = scrolls.indexOf(scroll);
