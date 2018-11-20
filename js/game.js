@@ -142,7 +142,9 @@ function play(delta) {
     // Update 
     scrollTimer += delta;
 
+    // Spawn scrolls if player isn't dead
     if (!dead) {
+        // Spawn scroll based on spawn times
         if (scrollTimer >= scrollSpawn) {
             spawnScroll();
         }
@@ -150,6 +152,7 @@ function play(delta) {
     
 
     scrolls.forEach(function(scroll) {
+        // Run if player isn't dead
         if (!dead) {
             //console.log(scroll.x)
             //Move the scroll
@@ -177,27 +180,34 @@ function play(delta) {
             }
             
 
-            // Scroll death
+            // Scroll death by player
             if (hit != null && hitTestRectangle(scroll, hit)) {
-                index = scrolls.indexOf(scroll);
-                app.stage.removeChild(scroll);
+                index = scrolls.indexOf(scroll);    // Locate scroll in question
+                app.stage.removeChild(scroll);      
                 if (index > -1) {
-                    scrolls.splice(index, 1);
+                    scrolls.splice(index, 1); 
                 }
+                
+                // Increment kill points and publish
                 killPoints++;
                 $('#killPoints').text("Kill Points: " + killPoints);
             }
+            // Scroll death by hitting player
             if (hitTestRectangle(scroll, character)) {
-                index = scrolls.indexOf(scroll);
-                app.stage.removeChild(scroll);
+                index = scrolls.indexOf(scroll);    // Locate scroll in question
+                app.stage.removeChild(scroll);      // Despawn scroll
                 if (index > -1) {
-                    scrolls.splice(index, 1);
+                    scrolls.splice(index, 1); // Remove scroll from active array
                 }
+
+                // Reduce player health
                 healthBar.outer.width -= 10;
                 characterHealth -= 10;
             }
         }
+        // Game Over
         else {
+            // Halt all enemey movement
             scroll.vx = 0;
             scroll.vy = 0;
         }
