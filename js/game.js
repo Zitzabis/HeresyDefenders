@@ -1,3 +1,5 @@
+// Flags
+
 // Globals
 let background;
 let character;
@@ -65,7 +67,9 @@ function setup() {
     app.stage.addChild(background);
 
     //Make the trees
-    spawnTree(50, 50);
+    spawnTree(20, 350);
+    spawnTree(180, 420);
+    spawnTree(315, 350);
 
     // Add character sprite
     spawnCharacter();
