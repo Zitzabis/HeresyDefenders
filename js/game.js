@@ -378,10 +378,17 @@ function createHealthBar() {
 /* Spawn Bumpers     */
 /*********************/
 function spawnBumpers() {
+    // Left Side
     createBumper("up", 160, 445);
     createBumper("right", 115, 325);
     createBumper("down", 295, 380);
     createBumper("right", 245, 500);
+
+    // Right Side
+    createBumper("down", 735, 445);
+    createBumper("left", 780, 570);
+    createBumper("up", 605, 510);
+    createBumper("left", 650, 390);
 }
 
 function createBumper(direction, x, y) {
