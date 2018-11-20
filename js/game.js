@@ -306,12 +306,30 @@ function spawnScroll() {
     }
     if (flipper == 1) {
         // Spawn location
+        scroll.x = background.width / 2 - 20;
+        scroll.y = 0;
+
+        // Initial speeds
+        scroll.vx = 0;
+        scroll.vy = 0.4;
+    }
+    if (flipper == 2) {
+        // Spawn location
         scroll.x = background.width - 50;
         scroll.y = 435;
 
         // Initial speeds
         scroll.vx = -0.4;
         scroll.vy = 0;
+    }
+    if (flipper == 3) {
+        // Spawn location
+        scroll.x = background.width / 2 - 20;
+        scroll.y = background.height  - 60;
+
+        // Initial speeds
+        scroll.vx = 0;
+        scroll.vy = -0.4;
     }
 
     // Start the animation
@@ -325,7 +343,7 @@ function spawnScroll() {
     app.stage.addChild(scroll);
 
     flipper++;
-    if (flipper == 2)
+    if (flipper == 4)
         flipper = 0;
 }
 
