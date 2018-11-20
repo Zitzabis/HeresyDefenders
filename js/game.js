@@ -1,5 +1,6 @@
 // Flags
 let dead = false;
+let spawnEnemy = false;
 
 // Globals
 let background;
@@ -15,6 +16,15 @@ let killPoints = 0;
 let scrolls = [];       // Array to hold all active scrolls
 let scrollTimer = 0;    // Timer to track when to spawn
 let scrollSpawn = 100;  // 300 = 5 seconds
+let waves = [0, 20, 30];
+let waveIndex = 0;
+let activeWaveCount = 0;
+$(document).ready(function() {
+    $( "#spawnWave" ).click(function() {
+        spawnEnemy = true;
+        waveIndex++;
+    });
+});
 
 /////////////////
 
@@ -186,9 +196,17 @@ function play(delta) {
 
     // Spawn scrolls if player isn't dead
     if (!dead) {
-        // Spawn scroll based on spawn times
-        if (scrollTimer >= scrollSpawn) {
-            spawnScroll();
+        if (activeWaveCount != waves[waveIndex] && spawnEnemy) {
+            // Spawn scroll based on spawn times
+            if (scrollTimer >= scrollSpawn) {
+                spawnScroll();
+                activeWaveCount++;
+                console.log("Scrolls: " + activeWaveCount);
+            }
+        }
+        else {
+            spawnEnemy = false;
+            activeWaveCount = 0;
         }
     }
     
@@ -304,15 +322,15 @@ function spawnScroll() {
         scroll.vx = 0.4;
         scroll.vy = 0;
     }
-    if (flipper == 1) {
-        // Spawn location
-        scroll.x = background.width / 2 - 20;
-        scroll.y = 0;
+    // if (flipper == 1) {
+    //     // Spawn location
+    //     scroll.x = background.width / 2 - 20;
+    //     scroll.y = 0;
 
-        // Initial speeds
-        scroll.vx = 0;
-        scroll.vy = 0.4;
-    }
+    //     // Initial speeds
+    //     scroll.vx = 0;
+    //     scroll.vy = 0.4;
+    // }
     if (flipper == 2) {
         // Spawn location
         scroll.x = background.width - 50;
@@ -322,15 +340,15 @@ function spawnScroll() {
         scroll.vx = -0.4;
         scroll.vy = 0;
     }
-    if (flipper == 3) {
-        // Spawn location
-        scroll.x = background.width / 2 - 20;
-        scroll.y = background.height  - 60;
+    // if (flipper == 3) {
+    //     // Spawn location
+    //     scroll.x = background.width / 2 - 20;
+    //     scroll.y = background.height  - 60;
 
-        // Initial speeds
-        scroll.vx = 0;
-        scroll.vy = -0.4;
-    }
+    //     // Initial speeds
+    //     scroll.vx = 0;
+    //     scroll.vy = -0.4;
+    // }
 
     // Start the animation
     scroll.animationSpeed = 0.3;
