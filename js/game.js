@@ -1,11 +1,15 @@
 // Flags
+let dead = false;
 
 // Globals
 let background;
-let character;
+
 let hit;
 let healthBar;
 
+// Character info
+let character;
+let characterHealth = 100;
 
 // Scrolls info
 let scrolls = [];       // Array to hold all active scrolls
@@ -138,52 +142,67 @@ function play(delta) {
     // Update 
     scrollTimer += delta;
 
-    if (scrollTimer >= scrollSpawn) {
-        spawnScroll();
+    if (!dead) {
+        if (scrollTimer >= scrollSpawn) {
+            spawnScroll();
+        }
     }
+    
 
     scrolls.forEach(function(scroll) {
-        //console.log(scroll.x)
-        //Move the scroll
-        scroll.x += scroll.vx;
-        scroll.y += scroll.vy;
-        
-        console.log(scroll.y);
+        if (!dead) {
+            //console.log(scroll.x)
+            //Move the scroll
+            scroll.x += scroll.vx;
+            scroll.y += scroll.vy;
+            
+            console.log(scroll.y);
 
-        if (scroll.x >= 115) {
-            scroll.vx = 0;
-            scroll.vy = -0.4;
-        }
-        if (scroll.y < 370 && scroll.y > 369) {
-            scroll.vx = 0.4;
-            scroll.vy = 0;
-        }
-        if (scroll.x > 250) {
-            scroll.vx = 0;
-            scroll.vy = 0.4;
-
-            if (scroll.y > 435  && scroll.y < 436) {
+            if (scroll.x >= 115) {
+                scroll.vx = 0;
+                scroll.vy = -0.4;
+            }
+            if (scroll.y < 370 && scroll.y > 369) {
                 scroll.vx = 0.4;
                 scroll.vy = 0;
             }
-        }
-        
+            if (scroll.x > 250) {
+                scroll.vx = 0;
+                scroll.vy = 0.4;
 
-        // Scroll death
-        if (hit != null && hitTestRectangle(scroll, hit)) {
-            index = scrolls.indexOf(scroll);
-            app.stage.removeChild(scroll);
-            if (index > -1) {
-                scrolls.splice(index, 1);
+                if (scroll.y > 435  && scroll.y < 436) {
+                    scroll.vx = 0.4;
+                    scroll.vy = 0;
+                }
+            }
+            
+
+            // Scroll death
+            if (hit != null && hitTestRectangle(scroll, hit)) {
+                index = scrolls.indexOf(scroll);
+                app.stage.removeChild(scroll);
+                if (index > -1) {
+                    scrolls.splice(index, 1);
+                }
+            }
+            if (hitTestRectangle(scroll, character)) {
+                index = scrolls.indexOf(scroll);
+                app.stage.removeChild(scroll);
+                if (index > -1) {
+                    scrolls.splice(index, 1);
+                }
+                healthBar.outer.width -= 10;
+                characterHealth -= 10;
             }
         }
-        if (hitTestRectangle(scroll, character)) {
-            index = scrolls.indexOf(scroll);
-            app.stage.removeChild(scroll);
-            if (index > -1) {
-                scrolls.splice(index, 1);
-            }
-            healthBar.outer.width -= 5;
+        else {
+            scroll.vx = 0;
+            scroll.vy = 0;
+        }
+
+        // Check for character death
+        if (characterHealth == 0) {
+            dead = true;
         }
     });
 }
@@ -264,14 +283,14 @@ function createHealthBar() {
     //Create the black background rectangle
     let innerBar = new PIXI.Graphics();
     innerBar.beginFill(0x000000);
-    innerBar.drawRect(0, 0, 128, 8);
+    innerBar.drawRect(0, 0, characterHealth, 8);
     innerBar.endFill();
     healthBar.addChild(innerBar);
 
     //Create the front red rectangle
     let outerBar = new PIXI.Graphics();
     outerBar.beginFill(0xFF3300);
-    outerBar.drawRect(0, 0, 128, 8);
+    outerBar.drawRect(0, 0, characterHealth, 8);
     outerBar.endFill();
     healthBar.addChild(outerBar);
 
