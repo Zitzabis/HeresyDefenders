@@ -21,6 +21,8 @@
                 <h5 class="card-header">Stats</h5>
                 <div class="card-body">
                     <p class="card-text">
+                        <span id="health">Health: 100/100</span>
+                        <br>
                         <span id="killPoints">Kill Points: 0</span>
                         <br>
                         <button id="spawnWave">Spawn Wave</button>

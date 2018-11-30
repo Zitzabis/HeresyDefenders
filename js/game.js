@@ -288,6 +288,7 @@ function play(delta) {
                 // Reduce player health
                 healthBar.outer.width -= 10;
                 characterHealth -= 10;
+                $('#health').text("Health: " + characterHealth + "/100");
             }
         }
         // Game Over
