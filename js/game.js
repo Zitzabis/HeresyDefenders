@@ -6,6 +6,8 @@ let spawnEnemy = false;
 let background;
 let hits = [];
 let healthBar;
+let baseSize = 948;
+let scalePercent;
 
 // Character info
 let character;
@@ -57,7 +59,7 @@ let app = new PIXI.Application({
     height: 256,        // default: 600
     antialias: true,    // default: false
     transparent: true, // default: false
-    resolution: 1       // default: 1
+    resolution: window.devicePixelRatio       // default: 1
 });
 
 // Set the renderer appearance
@@ -95,6 +97,20 @@ function setup() {
     background = new PIXI.Sprite(PIXI.loader.resources["assets/images/map.png"].texture);
     background.height = window.innerHeight;
     background.width = background.height;
+    
+    // Calculate scaling values
+    if (background.height < baseSize) {
+        scalePercent = background.height / baseSize; // Determine percentage for scaling
+        console.log(scalePercent);
+    }
+    else {
+        // If equal or above base size, lock to base size and set scaling to 1:1
+        background.height = baseSize;
+        background.width = baseSize;
+        scalePercent = 1;
+    }
+
+    // Add background
     app.stage.addChild(background);
 
     // Spawn bumpers
@@ -115,8 +131,10 @@ function setup() {
     left.press = () => {
         // Spawn hitbox
         hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
-        hit.x = 428;
-        hit.y = 448;
+        hit.x = scale(428);
+        hit.y = scale(448);
+        hit.scale.x = scale(1);
+        hit.scale.y = scale(1);
         app.stage.addChild(hit);
         if (hits.length != 0) {
             hits.forEach(function(hit) {
@@ -138,8 +156,10 @@ function setup() {
     right.press = () => {
         // Spawn hitbox
         hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
-        hit.x = 498;
-        hit.y = 448;
+        hit.x = scale(498);
+        hit.y = scale(448);
+        hit.scale.x = scale(1);
+        hit.scale.y = scale(1);
         app.stage.addChild(hit);
         if (hits.length != 0) {
             hits.forEach(function(hit) {
@@ -225,18 +245,18 @@ function play(delta) {
                 if ( hitTestRectangle(scroll, bumper.getSprite()) ) {
                     if (bumper.getDirection() == "up") {
                         scroll.vx = 0;
-                        scroll.vy = -0.4;
+                        scroll.vy = scale(-0.4);
                     }
                     if (bumper.getDirection() == "down") {
                         scroll.vx = 0;
-                        scroll.vy = 0.4;
+                        scroll.vy = scale(0.4);
                     }
                     if (bumper.getDirection() == "left") {
-                        scroll.vx = -0.4;
+                        scroll.vx = scale(-0.4);
                         scroll.vy = 0;
                     }
                     if (bumper.getDirection() == "right") {
-                        scroll.vx = 0.4;
+                        scroll.vx = scale(0.4);
                         scroll.vy = 0;
                     }
                 }
@@ -291,8 +311,10 @@ function play(delta) {
 /********************/
 function spawnCharacter() {
     character = new PIXI.Sprite(PIXI.loader.resources["assets/images/character.png"].texture);
-    character.x = 448;
-    character.y = 448;
+    character.x = scale(448);
+    character.y = scale(448);
+    character.scale.x = scale(1);
+    character.scale.y = scale(1);
     app.stage.addChild(character);
 }
 
@@ -310,44 +332,44 @@ function spawnScroll() {
     scroll = new PIXI.extras.AnimatedSprite(sheet.animations["scroll"]);
 
     // Scale scroll to correct size
-    scroll.scale.x = 0.2;
-    scroll.scale.y = 0.2;
+    scroll.scale.x = scale(0.2);
+    scroll.scale.y = scale(0.2);
 
     if (flipper == 0) {
         // Spawn location
-        scroll.x = 0;
-        scroll.y = 435;
+        scroll.x = scale(0);
+        scroll.y = scale(435);
 
         // Initial speeds
-        scroll.vx = 0.4;
+        scroll.vx = scale(0.4);
         scroll.vy = 0;
     }
     // if (flipper == 1) {
     //     // Spawn location
-    //     scroll.x = background.width / 2 - 20;
+    //     scroll.x = background.width / 2 - scale(20);
     //     scroll.y = 0;
 
     //     // Initial speeds
     //     scroll.vx = 0;
-    //     scroll.vy = 0.4;
+    //     scroll.vy = scale(0.4);
     // }
     if (flipper == 2) {
         // Spawn location
-        scroll.x = background.width - 50;
-        scroll.y = 435;
+        scroll.x = background.width - scale(50);
+        scroll.y = scale(435);
 
         // Initial speeds
-        scroll.vx = -0.4;
+        scroll.vx = scale(-0.4);
         scroll.vy = 0;
     }
     // if (flipper == 3) {
     //     // Spawn location
-    //     scroll.x = background.width / 2 - 20;
-    //     scroll.y = background.height  - 60;
+    //     scroll.x = background.width / 2 - scale(20);
+    //     scroll.y = background.height  - scale(60);
 
     //     // Initial speeds
     //     scroll.vx = 0;
-    //     scroll.vy = -0.4;
+    //     scroll.vy = scale(-0.4);
     // }
 
     // Start the animation
@@ -369,11 +391,11 @@ function spawnTree(x, y) {
     sheet = PIXI.loader.resources["assets/images/tree.json"].spritesheet;
     tree = new PIXI.extras.AnimatedSprite(sheet.animations.tree);
     
-    tree.scale.x = 0.8;
-    tree.scale.y = 0.8;
+    tree.scale.x = scale(0.8);
+    tree.scale.y = scale(0.8);
 
-    tree.x = x;
-    tree.y = y;
+    tree.x = scale(x);
+    tree.y = scale(y);
 
     tree.animationSpeed = 0.1;
     
@@ -429,8 +451,10 @@ function spawnBumpers() {
 
 function createBumper(direction, x, y) {
     bumper = new PIXI.Sprite(PIXI.loader.resources["assets/images/bumper.png"].texture);
-    bumper.x = x;
-    bumper.y = y;
+    bumper.x = scale(x);
+    bumper.y = scale(y);
+    bumper.scale.x = scale(1);
+    bumper.scale.y = scale(1);
     app.stage.addChild(bumper);
     bumperObject = new Bumper(bumper, direction);
     bumpers.push(bumperObject);
