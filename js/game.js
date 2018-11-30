@@ -117,9 +117,7 @@ function setup() {
     spawnBumpers();
 
     //Make the trees
-    spawnTree(20, 350);
-    spawnTree(180, 420);
-    spawnTree(315, 350);
+    spawnTrees();
 
     // Add character sprite
     spawnCharacter();
@@ -156,7 +154,7 @@ function setup() {
     right.press = () => {
         // Spawn hitbox
         hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
-        hit.x = scale(498);
+        hit.x = scale(508);
         hit.y = scale(448);
         hit.scale.x = scale(1);
         hit.scale.y = scale(1);
@@ -311,10 +309,10 @@ function play(delta) {
 /********************/
 function spawnCharacter() {
     character = new PIXI.Sprite(PIXI.loader.resources["assets/images/character.png"].texture);
-    character.x = scale(448);
-    character.y = scale(448);
-    character.scale.x = scale(1);
-    character.scale.y = scale(1);
+    character.x = scale(430);
+    character.y = scale(430);
+    character.scale.x = scale(0.4);
+    character.scale.y = scale(0.4);
     app.stage.addChild(character);
 }
 
@@ -387,25 +385,6 @@ function spawnScroll() {
         flipper = 0;
 }
 
-function spawnTree(x, y) {
-    sheet = PIXI.loader.resources["assets/images/tree.json"].spritesheet;
-    tree = new PIXI.extras.AnimatedSprite(sheet.animations.tree);
-    
-    tree.scale.x = scale(0.8);
-    tree.scale.y = scale(0.8);
-
-    tree.x = scale(x);
-    tree.y = scale(y);
-
-    tree.animationSpeed = 0.1;
-    
-    setTimeout(function(tree){
-        tree.play();
-    }, randomInt(1, 200), tree);
-
-    app.stage.addChild(tree);
-}
-
 /*********************/
 /* Create Health Bar */
 /*********************/
@@ -458,4 +437,139 @@ function createBumper(direction, x, y) {
     app.stage.addChild(bumper);
     bumperObject = new Bumper(bumper, direction);
     bumpers.push(bumperObject);
+}
+
+/*********************/
+/* Spawn Trees       */
+/*********************/
+function spawnTrees() {
+    x = 0;
+    y = 0;
+    // Q1
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
+    }
+
+    x = 500;
+    // Q2
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
+    }
+    x = 600;
+    for (i = 0; i < 5; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(330 + y, 340 + y));
+    }
+
+    x = 0;
+    y = 500;
+    // Q3
+    for (i = 0; i < 6; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(320 + y, 330 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(370 + y, 380 + y));
+    }
+
+    x = 500;
+    y = 500;
+    // Q4
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(320 + y, 330 + y));
+    }
+    for (i = 0; i < 7; i++) {
+        spawnTree((randomInt(60, 65) * i) + x, randomInt(370 + y, 380 + y));
+    }
+
+    spawnTree(20, 350);
+    spawnTree(180, 420);
+    spawnTree(315, 350);
+
+    spawnTree(585, 500);
+    spawnTree(720, 420);
+    spawnTree(850, 500);
+}
+
+/*********************/
+/* Spawn Tree        */
+/*********************/
+function spawnTree(x, y) {
+    sheet = PIXI.loader.resources["assets/images/tree.json"].spritesheet;
+    tree = new PIXI.extras.AnimatedSprite(sheet.animations.tree);
+    
+    tree.scale.x = scale(0.8);
+    tree.scale.y = scale(0.8);
+
+    tree.x = scale(x);
+    tree.y = scale(y);
+
+    tree.animationSpeed = 0.1;
+    
+    setTimeout(function(tree){
+        tree.play();
+    }, randomInt(1, 200), tree);
+
+    app.stage.addChild(tree);
 }
