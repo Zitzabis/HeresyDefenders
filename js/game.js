@@ -331,13 +331,13 @@ function spawnScroll() {
     scroll = new PIXI.extras.AnimatedSprite(sheet.animations["scroll"]);
 
     // Scale scroll to correct size
-    scroll.scale.x = scale(0.2);
-    scroll.scale.y = scale(0.2);
+    scroll.scale.x = scale(0.3);
+    scroll.scale.y = scale(0.3);
 
     if (flipper == 0) {
         // Spawn location
         scroll.x = scale(0);
-        scroll.y = scale(435);
+        scroll.y = scale(415);
 
         // Initial speeds
         scroll.vx = scale(0.4);
@@ -355,7 +355,7 @@ function spawnScroll() {
     if (flipper == 2) {
         // Spawn location
         scroll.x = background.width - scale(50);
-        scroll.y = scale(435);
+        scroll.y = scale(415);
 
         // Initial speeds
         scroll.vx = scale(-0.4);
@@ -417,16 +417,16 @@ function createHealthBar() {
 /*********************/
 function spawnBumpers() {
     // Left Side
-    createBumper("up", 160, 445);
-    createBumper("right", 115, 325);
-    createBumper("down", 295, 380);
+    createBumper("up", 160, 465);
+    createBumper("right", 115, 300);
+    createBumper("down", 295, 350);
     createBumper("right", 245, 500);
 
     // Right Side
-    createBumper("down", 735, 445);
+    createBumper("down", 735, 415);
     createBumper("left", 780, 570);
-    createBumper("up", 605, 510);
-    createBumper("left", 650, 390);
+    createBumper("up", 605, 530);
+    createBumper("left", 650, 370);
 }
 
 function createBumper(direction, x, y) {
