@@ -1,3 +1,10 @@
+<style>
+    * { padding: 0; margin: 0; overflow:hidden; }
+    html,body {
+        height: 100%;
+    }
+</style>
+
 <div class="container-fluid h-100" style="margin: 0; padding: 0;">
     <div class="row h-100" style="margin: 0; padding: 0;">
         <div id="game" class="col h-100" style="margin: 0; padding: 0;">
