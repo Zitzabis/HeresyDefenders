@@ -8,15 +8,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/pixi.min.js"></script>
     <script src="js/mechanics.js"></script>
-    <style>
-        * { padding: 0; margin: 0; overflow:hidden; }
-        html,body {
-            height: 100%;
-        }
-    </style>
+    
     <body>
         <?php
-            include_once("pages/game.php")  
+            include_once("libraries/Mobile_Detect.php");
+            $detect = new Mobile_Detect;
+            if ( !$detect->isMobile() ) {
+                include_once("pages/game.php");
+            }
+            else {
+                include_once("pages/mobile.php");
+            }
         ?>
     </body>
 </html>
