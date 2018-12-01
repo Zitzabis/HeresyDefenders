@@ -4,7 +4,6 @@ let spawnEnemy = false;
 
 // Globals
 let background;
-let hits = [];
 let healthBar;
 let baseSize = 948;
 let scalePercent;
@@ -44,6 +43,22 @@ Bumper.prototype.getDirection = function(){
     return this.direction;
 }
 
+//////////////////
+
+let hits = [];
+
+function Hit(sprite, direction) {
+    this.sprite = sprite;
+    this.direction = direction;
+}
+
+Hit.prototype.getSprite = function(){
+    return this.sprite;
+}
+Hit.prototype.getDirection = function(){
+    return this.direction;
+}
+
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
@@ -78,7 +93,10 @@ PIXI.loader
 .add("assets/images/tree.json")
 .add("assets/images/scroll.png")
 .add("assets/images/scroll.json")
-.add("assets/images/hit.png")
+.add("assets/images/swordLeft.png")
+.add("assets/images/swordRight.png")
+.add("assets/images/swordUp.png")
+.add("assets/images/swordDown.png")
 .add("assets/images/character.png")
 .add("assets/images/bumper.png")
 .load(setup);
@@ -126,81 +144,116 @@ function setup() {
 
     //Left arrow key `press` method
     left.press = () => {
-        // Spawn hitbox
-        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
-        hit.x = scale(428);
-        hit.y = scale(448);
-        hit.scale.x = scale(1);
-        hit.scale.y = scale(1);
-        app.stage.addChild(hit);
         if (hits.length != 0) {
             hits.forEach(function(hit) {
-                app.stage.removeChild(hit);
+                app.stage.removeChild(hit.getSprite());
             });
             hits = [];
         }
-        hits.push(hit);
+
+        // Spawn hitbox
+        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/swordLeft.png"].texture);
+        hit.x = scale(438);
+        hit.y = scale(448);
+        hit.scale.x = scale(0.1);
+        hit.scale.y = scale(0.1);
+        hit.pivot.x = hit.x;
+        hit.pivot.y = hit.y;
+        app.stage.addChild(hit);
+        hitObject = new Hit(hit, "left");
+        hits.push(hitObject);
     };
     left.release = () => {
         // Remove the hitbox
         hits.forEach(function(hit) {
-            app.stage.removeChild(hit);
+            app.stage.removeChild(hit.getSprite());
         });
         hits = [];
     };
 
     //Right
     right.press = () => {
-        // Spawn hitbox
-        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
-        hit.x = scale(508);
-        hit.y = scale(488);
-        hit.scale.x = scale(1);
-        hit.scale.y = scale(1);
-        hit.pivot.x = 0;
-        hit.pivot.y = hit.height;
-        app.stage.addChild(hit);
         if (hits.length != 0) {
             hits.forEach(function(hit) {
-                app.stage.removeChild(hit);
+                app.stage.removeChild(hit.getSprite());
             });
+            hits = [];
         }
-        hits.push(hit);
+
+        // Spawn hitbox
+        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/swordRight.png"].texture);
+        hit.x = scale(508);
+        hit.y = scale(468);
+        hit.scale.x = scale(0.1);
+        hit.scale.y = scale(0.1);
+        hit.pivot.x = 0;
+        hit.pivot.y = hit.y;
+        app.stage.addChild(hit);
+        hitObject = new Hit(hit, "right");
+        hits.push(hitObject);
     };
     right.release = () => {
         // Remove the hitbox
         hits.forEach(function(hit) {
-            app.stage.removeChild(hit);
+            app.stage.removeChild(hit.getSprite());
         });
         hits = [];
     };
 
-    /*
+    
     //Up
     up.press = () => {
-        man.vy = -5;
-        man.vx = 0;
+        if (hits.length != 0) {
+            hits.forEach(function(hit) {
+                app.stage.removeChild(hit.getSprite());
+            });
+            hits = [];
+        }
+
+        // Spawn hitbox
+        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/swordUp.png"].texture);
+        hit.x = scale(470);
+        hit.y = scale(380);
+        hit.scale.x = scale(0.1);
+        hit.scale.y = scale(0.1);
+        app.stage.addChild(hit);
+        hitObject = new Hit(hit, "up");
+        hits.push(hitObject);
     };
     up.release = () => {
-        if (!down.isDown && man.vx === 0) {
-            man.vy = 0;
-        }
+        // Remove the hitbox
+        hits.forEach(function(hit) {
+            app.stage.removeChild(hit.getSprite());
+        });
+        hits = [];
     };
-
 
     //Down
     down.press = () => {
-        man.vy = 5;
-        man.vx = 0;
+        if (hits.length != 0) {
+            hits.forEach(function(hit) {
+                app.stage.removeChild(hit.getSprite());
+            });
+            hits = [];
+        }
+
+        // Spawn hitbox
+        hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/swordDown.png"].texture);
+        hit.x = scale(470);
+        hit.y = scale(520);
+        hit.scale.x = scale(0.1);
+        hit.scale.y = scale(0.1);
+        app.stage.addChild(hit);
+        hitObject = new Hit(hit, "down");
+        hits.push(hitObject);
     };
     down.release = () => {
-        if (!up.isDown && man.vx === 0) {
-            man.vy = 0;
-        }
+        // Remove the hitbox
+        hits.forEach(function(hit) {
+            app.stage.removeChild(hit.getSprite());
+        });
+        hits = [];
     };
-    */
-
-    
 }
 
 function gameLoop(delta){
@@ -230,7 +283,31 @@ function play(delta) {
 
     if (hits.length != 0) {
         hit = hits[0];
-        hit.rotation += 0.1;
+        hitSprite = hit.getSprite();
+        if (hit.getDirection() == "left") {
+            if (hitSprite.rotation > -1.5) {
+                hitSprite.rotation -= 0.1;
+            }
+            else {
+                // Remove the hitbox
+                hits.forEach(function(hit) {
+                    app.stage.removeChild(hit.getSprite());
+                });
+                hits = [];
+            }
+        }
+        if (hit.getDirection() == "right") {
+            if (hitSprite.rotation < 1.5) {
+                hitSprite.rotation += 0.1;
+            }
+            else {
+                // Remove the hitbox
+                hits.forEach(function(hit) {
+                    app.stage.removeChild(hit.getSprite());
+                });
+                hits = [];
+            }
+        }
     }
     
 
