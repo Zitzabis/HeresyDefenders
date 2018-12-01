@@ -14,6 +14,7 @@ let characterHealth = 100;
 let killPoints = 0;
 
 // Scrolls info
+let scrollSpeed = 0.6;
 let scrolls = [];       // Array to hold all active scrolls
 let scrollTimer = 0;    // Timer to track when to spawn
 let scrollSpawn = 100;  // 300 = 5 seconds
@@ -153,12 +154,11 @@ function setup() {
 
         // Spawn hitbox
         hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/swordLeft.png"].texture);
-        hit.x = scale(438);
-        hit.y = scale(448);
+        hit.x = scale(428);
+        hit.y = scale(488);
         hit.scale.x = scale(0.1);
         hit.scale.y = scale(0.1);
-        hit.pivot.x = hit.x;
-        hit.pivot.y = hit.y;
+        hit.pivot.set(hit.width, hit.y + hit.height);
         app.stage.addChild(hit);
         hitObject = new Hit(hit, "left");
         hits.push(hitObject);
@@ -186,8 +186,7 @@ function setup() {
         hit.y = scale(468);
         hit.scale.x = scale(0.1);
         hit.scale.y = scale(0.1);
-        hit.pivot.x = 0;
-        hit.pivot.y = hit.y;
+        hit.pivot.set(0, hit.y + hit.height);
         app.stage.addChild(hit);
         hitObject = new Hit(hit, "right");
         hits.push(hitObject);
@@ -325,39 +324,46 @@ function play(delta) {
                 if ( hitTestRectangle(scroll, bumper.getSprite()) ) {
                     if (bumper.getDirection() == "up") {
                         scroll.vx = 0;
-                        scroll.vy = scale(-0.4);
+                        scroll.vy = scale(-(scrollSpeed));
                     }
                     if (bumper.getDirection() == "down") {
                         scroll.vx = 0;
-                        scroll.vy = scale(0.4);
+                        scroll.vy = scale(scrollSpeed);
                     }
                     if (bumper.getDirection() == "left") {
-                        scroll.vx = scale(-0.4);
+                        scroll.vx = scale(-(scrollSpeed));
                         scroll.vy = 0;
                     }
                     if (bumper.getDirection() == "right") {
-                        scroll.vx = scale(0.4);
+                        scroll.vx = scale(scrollSpeed);
                         scroll.vy = 0;
                     }
                 }
             });
 
             // Scroll death by player
-            if (hits.length != 0 && hitTestRectangle(scroll, hit)) {
-                index = scrolls.indexOf(scroll);    // Locate scroll in question
-                app.stage.removeChild(scroll);      
-                if (index > -1) {
-                    scrolls.splice(index, 1); 
-                }
-
+            if (hits.length != 0) {
                 hits.forEach(function(hit) {
-                    app.stage.removeChild(hit);
+                    hit = hit.getSprite();
+                    console.log(hit.x);
+                    if (hitTestRectangle(hit, scroll)) {
+                        console.log("hit");
+                        index = scrolls.indexOf(scroll);    // Locate scroll in question
+                        app.stage.removeChild(scroll);      
+                        if (index > -1) {
+                            scrolls.splice(index, 1); 
+                        }
+    
+                        hits.forEach(function(hit) {
+                            app.stage.removeChild(hit.getSprite());
+                        });
+                        hits = [];
+                        
+                        // Increment kill points and publish
+                        killPoints++;
+                        $('#killPoints').text("Kill Points: " + killPoints);
+                    }
                 });
-                hits = [];
-                
-                // Increment kill points and publish
-                killPoints++;
-                $('#killPoints').text("Kill Points: " + killPoints);
             }
             // Scroll death by hitting player
             if (hitTestRectangle(scroll, character)) {
@@ -422,36 +428,36 @@ function spawnScroll() {
         scroll.y = scale(415);
 
         // Initial speeds
-        scroll.vx = scale(0.4);
+        scroll.vx = scale(scrollSpeed);
         scroll.vy = 0;
     }
-    // if (flipper == 1) {
-    //     // Spawn location
-    //     scroll.x = background.width / 2 - scale(20);
-    //     scroll.y = 0;
+    if (flipper == 1) {
+        // Spawn location
+        scroll.x = background.width / 2 - scale(30);
+        scroll.y = 0;
 
-    //     // Initial speeds
-    //     scroll.vx = 0;
-    //     scroll.vy = scale(0.4);
-    // }
+        // Initial speeds
+        scroll.vx = 0;
+        scroll.vy = scale(scrollSpeed);
+    }
     if (flipper == 2) {
         // Spawn location
         scroll.x = background.width - scale(50);
         scroll.y = scale(415);
 
         // Initial speeds
-        scroll.vx = scale(-0.4);
+        scroll.vx = scale(-(scrollSpeed));
         scroll.vy = 0;
     }
-    // if (flipper == 3) {
-    //     // Spawn location
-    //     scroll.x = background.width / 2 - scale(20);
-    //     scroll.y = background.height  - scale(60);
+    if (flipper == 3) {
+        // Spawn location
+        scroll.x = background.width / 2 - scale(30);
+        scroll.y = background.height  - scale(60);
 
-    //     // Initial speeds
-    //     scroll.vx = 0;
-    //     scroll.vy = scale(-0.4);
-    // }
+        // Initial speeds
+        scroll.vx = 0;
+        scroll.vy = scale(-(scrollSpeed));
+    }
 
     // Start the animation
     scroll.animationSpeed = 0.3;

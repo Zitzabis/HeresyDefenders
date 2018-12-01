@@ -32,7 +32,7 @@
             <div class="card">
                 <h5 class="card-header">Instructions</h5>
                 <div class="card-body">
-                    <p class="card-text">Use your arrow keys to attack.<br>Only left and right attacks are enabled right now.</p>
+                    <p class="card-text">Use your arrow keys to attack.</p>
                 </div>
             </div>
             <div class="card">
