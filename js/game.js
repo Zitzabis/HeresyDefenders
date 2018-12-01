@@ -101,7 +101,6 @@ function setup() {
     // Calculate scaling values
     if (background.height < baseSize) {
         scalePercent = background.height / baseSize; // Determine percentage for scaling
-        console.log(scalePercent);
     }
     else {
         // If equal or above base size, lock to base size and set scaling to 1:1
@@ -155,15 +154,16 @@ function setup() {
         // Spawn hitbox
         hit = new PIXI.Sprite(PIXI.loader.resources["assets/images/hit.png"].texture);
         hit.x = scale(508);
-        hit.y = scale(448);
+        hit.y = scale(488);
         hit.scale.x = scale(1);
         hit.scale.y = scale(1);
+        hit.pivot.x = 0;
+        hit.pivot.y = hit.height;
         app.stage.addChild(hit);
         if (hits.length != 0) {
             hits.forEach(function(hit) {
                 app.stage.removeChild(hit);
             });
-            hits = [];
         }
         hits.push(hit);
     };
@@ -226,6 +226,11 @@ function play(delta) {
             spawnEnemy = false;
             activeWaveCount = 0;
         }
+    }
+
+    if (hits.length != 0) {
+        hit = hits[0];
+        hit.rotation += 0.1;
     }
     
 
@@ -310,7 +315,7 @@ function play(delta) {
 /********************/
 function spawnCharacter() {
     character = new PIXI.Sprite(PIXI.loader.resources["assets/images/character.png"].texture);
-    character.x = scale(430);
+    character.x = scale(440);
     character.y = scale(430);
     character.scale.x = scale(0.4);
     character.scale.y = scale(0.4);
