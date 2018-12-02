@@ -94,6 +94,8 @@ PIXI.loader
 .add("assets/images/tree.json")
 .add("assets/images/scroll.png")
 .add("assets/images/scroll.json")
+.add("assets/images/rock.png")
+.add("assets/images/rock.json")
 .add("assets/images/swordLeft.png")
 .add("assets/images/swordRight.png")
 .add("assets/images/swordUp.png")
@@ -532,11 +534,15 @@ function createBumper(direction, x, y) {
 /* Spawn Trees       */
 /*********************/
 function spawnTrees() {
+    randomRock = randomInt(1, 7);
     x = 0;
     y = 0;
     // Q1
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 30);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
@@ -544,8 +550,12 @@ function spawnTrees() {
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
     }
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 210 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
@@ -559,8 +569,12 @@ function spawnTrees() {
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
     }
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 100 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
@@ -568,8 +582,12 @@ function spawnTrees() {
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
     }
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 250 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
@@ -582,8 +600,12 @@ function spawnTrees() {
     x = 0;
     y = 500;
     // Q3
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 6; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 30 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
@@ -594,8 +616,12 @@ function spawnTrees() {
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
     }
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 250 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
@@ -613,14 +639,22 @@ function spawnTrees() {
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
     }
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 150 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
     }
+    randomRock = randomInt(1, 7);
     for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
+        if (i == randomRock)
+            spawnRock((randomInt(60, 65) * i) + x, 250 + y);
+        else
+            spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
     }
     for (i = 0; i < 7; i++) {
         spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
@@ -661,4 +695,26 @@ function spawnTree(x, y) {
     }, randomInt(1, 200), tree);
 
     app.stage.addChild(tree);
+}
+
+/*********************/
+/* Spawn Rock        */
+/*********************/
+function spawnRock(x, y) {
+    sheet = PIXI.loader.resources["assets/images/rock.json"].spritesheet;
+    rock = new PIXI.extras.AnimatedSprite(sheet.animations.rock);
+    
+    rock.scale.x = scale(0.1);
+    rock.scale.y = scale(0.1);
+
+    rock.x = scale(x);
+    rock.y = scale(y);
+
+    rock.animationSpeed = 0.05;
+    
+    setTimeout(function(rock){
+        rock.play();
+    }, randomInt(1, 200), rock);
+
+    app.stage.addChild(rock);
 }
