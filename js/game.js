@@ -11,7 +11,7 @@ let gui = new GUI();
 
 // Character info
 let health = 100;
-let killPoints = 50;
+let killPoints = 0;
 let character;
 let characterHealth = health;
 let healthPlus = 0;
@@ -53,7 +53,7 @@ $(document).ready(function() {
             gui.updateKillPoints();
 
             health += 30;
-            
+
             characterHealth = health;
             gui.resetHealth();
             gui.checkShop();
