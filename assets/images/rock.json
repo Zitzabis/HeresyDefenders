@@ -1,0 +1,175 @@
+{"frames": {
+
+"rock0000.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0001.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0002.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0003.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0004.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0005.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0006.png":
+{
+	"frame": {"x":73,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0007.png":
+{
+	"frame": {"x":145,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0008.png":
+{
+	"frame": {"x":217,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0009.png":
+{
+	"frame": {"x":289,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0010.png":
+{
+	"frame": {"x":361,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0011.png":
+{
+	"frame": {"x":433,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0012.png":
+{
+	"frame": {"x":505,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0013.png":
+{
+	"frame": {"x":433,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0014.png":
+{
+	"frame": {"x":361,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0015.png":
+{
+	"frame": {"x":289,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0016.png":
+{
+	"frame": {"x":217,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0017.png":
+{
+	"frame": {"x":145,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0018.png":
+{
+	"frame": {"x":73,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+},
+"rock0019.png":
+{
+	"frame": {"x":1,"y":1,"w":70,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":1,"w":70,"h":41},
+	"sourceSize": {"w":75,"h":45}
+}},
+"animations": {
+	"rock": ["rock0000.png","rock0001.png","rock0002.png","rock0003.png","rock0004.png","rock0005.png","rock0006.png","rock0007.png","rock0008.png","rock0009.png","rock0010.png","rock0011.png","rock0012.png","rock0013.png","rock0014.png","rock0015.png","rock0016.png","rock0017.png","rock0018.png","rock0019.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "rock.png",
+	"format": "RGBA8888",
+	"size": {"w":576,"h":43},
+	"scale": "0.15",
+	"smartupdate": "$TexturePacker:SmartUpdate:875e0c8231fe99921bc094c2b4845dad:2f57d0cfcad907e416aeb93c641c2750:936b2f0ef876fe993b907de9e132dd63$"
+}
+}
