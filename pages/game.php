@@ -17,16 +17,50 @@
                 <script src="js/game.js"></script>
         </div>
         <div class="col h-100">
-            <div class="card">
-                <h5 class="card-header">Stats</h5>
-                <div class="card-body">
-                    <p class="card-text">
-                        <span id="health">Health: 100/100</span>
-                        <br>
-                        <span id="killPoints">Kill Points: 0</span>
-                        <br>
-                        <button id="spawnWave">Spawn Wave</button>
-                    </p>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <h5 class="card-header">Stats</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="card-text">
+                                        Health: <span id="health"></span>
+                                        <br>
+                                        Kill Points: <span id="killPoints"></span>
+                                        <br>
+                                        <button class="btn btn-primary" id="spawnWave">Spawn Wave</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h5 class="card-header">Shop</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="card-text">
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <span id="armourCost"></span> Kill Points
+                                                <br>
+                                                <button class="btn btn-dark" id="buyArmour">Buy Armour</button>
+                                            </div>
+                                            <div class="col text-center">
+                                                <span id="healthCost"></span> Kill Points
+                                                <br>
+                                                <button class="btn btn-dark" id="buyHealth">Buy Health</button>
+                                            </div>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card">

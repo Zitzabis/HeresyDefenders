@@ -7,13 +7,18 @@ let background;
 let healthBar;
 let baseSize = 948;
 let scalePercent;
+let gui = new GUI();
 
 // Character info
+let health = 100;
+let killPoints = 50;
 let character;
-let characterHealth = 100;
-let killPoints = 0;
+let characterHealth = health;
+let healthPlus = 0;
+let armour = 0;
 
 // Scrolls info
+let scrollAttack = 10;
 let scrollSpeed = 0.6;
 let scrolls = [];       // Array to hold all active scrolls
 let scrollTimer = 0;    // Timer to track when to spawn
@@ -25,6 +30,34 @@ $(document).ready(function() {
     $( "#spawnWave" ).click(function() {
         spawnEnemy = true;
         waveIndex++;
+    });
+});
+
+// Shop info
+let armourCost = 20;
+let healthCost = 30;
+$(document).ready(function() {
+    $( "#buyArmour" ).click(function() {
+        if (killPoints >= armourCost) {
+            killPoints -= armourCost;
+            gui.updateKillPoints();
+
+            armour += 3;
+
+            gui.checkShop();
+        }
+    });
+    $( "#buyHealth" ).click(function() {
+        if (killPoints >= healthCost) {
+            killPoints -= healthCost;
+            gui.updateKillPoints();
+
+            health += 30;
+            
+            characterHealth = health;
+            gui.resetHealth();
+            gui.checkShop();
+        }
     });
 });
 
@@ -62,6 +95,11 @@ Hit.prototype.getDirection = function(){
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
+
+// Setup GUI
+$(document).ready(function() {
+    gui.setup();
+});
 
 // Determine PixiJS platform
 let type = "WebGL"
@@ -257,7 +295,7 @@ function setup() {
     };
 }
 
-function gameLoop(delta){
+function gameLoop(delta) {
     //Update the current game state:
     state(delta);
 }
@@ -279,6 +317,11 @@ function play(delta) {
         else {
             spawnEnemy = false;
             activeWaveCount = 0;
+
+            if (scrolls.length == 0) {
+                characterHealth = health;
+                gui.updateHealth();
+            }
         }
     }
 
@@ -347,9 +390,7 @@ function play(delta) {
             if (hits.length != 0) {
                 hits.forEach(function(hit) {
                     hit = hit.getSprite();
-                    console.log(hit.x);
                     if (hitTestRectangle(hit, scroll)) {
-                        console.log("hit");
                         index = scrolls.indexOf(scroll);    // Locate scroll in question
                         app.stage.removeChild(scroll);      
                         if (index > -1) {
@@ -363,7 +404,7 @@ function play(delta) {
                         
                         // Increment kill points and publish
                         killPoints++;
-                        $('#killPoints').text("Kill Points: " + killPoints);
+                        gui.updateKillPoints();
                     }
                 });
             }
@@ -377,8 +418,8 @@ function play(delta) {
 
                 // Reduce player health
                 healthBar.outer.width -= 10;
-                characterHealth -= 10;
-                $('#health').text("Health: " + characterHealth + "/100");
+                characterHealth -= scrollAttack - armour;
+                gui.updateHealth();
             }
         }
         // Game Over
