@@ -10,6 +10,7 @@ let scalePercent;
 let gui = new GUI();        // GUI control object
 let keys = new Keys();      // Key press event object
 let GO = new GameObject();  // Game object spawning object
+let music = new Music();
 
 // Character info
 let health = 100;
@@ -32,6 +33,10 @@ $(document).ready(function() {
     $( "#spawnWave" ).click(function() {
         spawnEnemy = true;
         waveIndex++;
+
+        // Switch music playing to in-game
+        music.stopSong();
+        music.playMusic();
     });
 });
 
@@ -117,6 +122,11 @@ document.getElementById('game').appendChild(app.view);
 
 // Load assets
 loadAssets();
+
+// Play starting song
+$(document).ready(function() {
+    music.playSong(0);
+});
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////

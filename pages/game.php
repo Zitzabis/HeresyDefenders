@@ -12,7 +12,22 @@
     .hideOverflow {
         overflow:hidden;
     }
+    .mute {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+    }
 </style>
+
+<div class="mute btn btn-dark" style="padding: 0.2rem" id="muteButton"><span id="mute" class="mdi mdi-volume-high mdi-36px mdi-light"></span></div>
+<script>
+    $(document).ready(function() {
+        $( "#muteButton" ).click(function() {
+            music.toggleMute();
+        });
+    });
+</script>
 
 <div class="container-fluid h-100" style="margin: 0; padding: 0;">
     <div class="row h-100" style="margin: 0; padding: 0;">
@@ -77,12 +92,15 @@
                 <h5 class="card-header">Instructions</h5>
                 <div class="card-body">
                     <p class="card-text">
-                    Use your arrow keys to attack enemies.
-                    <br>
-                    <br>
-                    Buying health from the shop will increase your total health bar.
-                    <br>
-                    Buying armour from the shop will cause you to take less damage from enemies. Each point of armour is one point less from attacks.
+                        Use your arrow keys to attack enemies.
+                        <br>
+                        <br>
+                        Buying health from the shop will increase your total health bar.
+                        <br>
+                        Buying armour from the shop will cause you to take less damage from enemies. Each point of armour is one point less from attacks.
+                        <br>
+                        <br>
+                        You can mute/unmute the music using the button found in the top-left of the screen.
                     </p>
                 </div>
             </div>
