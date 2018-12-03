@@ -23,7 +23,7 @@
                         <h5 class="card-header">Stats</h5>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col">
+                                <div class="col border-right">
                                     <p class="card-text">
                                         Health: <span id="health"></span>
                                         <br>
@@ -31,6 +31,11 @@
                                         <br>
                                         <button class="btn btn-primary" id="spawnWave">Spawn Wave</button>
                                     </p>
+                                </div>
+                                <div class="col text-center border-left">
+                                    <img src="assets/images/characterOriginal.png" class="img-fluid">
+                                    <br>
+                                    Bob Brown
                                 </div>
                             </div>
                         </div>
@@ -44,12 +49,12 @@
                                 <div class="col">
                                     <p class="card-text">
                                         <div class="row">
-                                            <div class="col text-center">
+                                            <div class="col text-center border-right">
                                                 <span id="armourCost"></span> Kill Points
                                                 <br>
                                                 <button class="btn btn-dark" id="buyArmour">Buy Armour</button>
                                             </div>
-                                            <div class="col text-center">
+                                            <div class="col text-center border-left">
                                                 <span id="healthCost"></span> Kill Points
                                                 <br>
                                                 <button class="btn btn-dark" id="buyHealth">Buy Health</button>
@@ -66,7 +71,14 @@
             <div class="card">
                 <h5 class="card-header">Instructions</h5>
                 <div class="card-body">
-                    <p class="card-text">Use your arrow keys to attack.</p>
+                    <p class="card-text">
+                    Use your arrow keys to attack enemies.
+                    <br>
+                    <br>
+                    Buying health from the shop will increase your total health bar.
+                    <br>
+                    Buying armour from the shop will cause you to take less damage from enemies.
+                    </p>
                 </div>
             </div>
             <div class="card">
