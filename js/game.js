@@ -7,8 +7,9 @@ let background;
 let healthBar;
 let baseSize = 948;
 let scalePercent;
-let gui = new GUI();
-let keys = new Keys();
+let gui = new GUI();        // GUI control object
+let keys = new Keys();      // Key press event object
+let GO = new GameObject();  // Game object spawning object
 
 // Character info
 let health = 100;
@@ -33,6 +34,9 @@ $(document).ready(function() {
         waveIndex++;
     });
 });
+
+// Bumper info
+let bumpers = [];
 
 // Shop info
 let armourCost = 20;
@@ -61,22 +65,6 @@ $(document).ready(function() {
         }
     });
 });
-
-/////////////////
-
-let bumpers = [];
-
-function Bumper(sprite, direction) {
-    this.sprite = sprite;
-    this.direction = direction;
-}
-
-Bumper.prototype.getSprite = function(){
-    return this.sprite;
-}
-Bumper.prototype.getDirection = function(){
-    return this.direction;
-}
 
 //////////////////
 
@@ -127,21 +115,7 @@ app.renderer.resize(window.innerWidth, window.innerHeight);
 document.getElementById('game').appendChild(app.view);
 
 // Load assets
-PIXI.loader
-.add("assets/images/map.png")
-.add("assets/images/tree.png")
-.add("assets/images/tree.json")
-.add("assets/images/scroll.png")
-.add("assets/images/scroll.json")
-.add("assets/images/rock.png")
-.add("assets/images/rock.json")
-.add("assets/images/swordLeft.png")
-.add("assets/images/swordRight.png")
-.add("assets/images/swordUp.png")
-.add("assets/images/swordDown.png")
-.add("assets/images/character.png")
-.add("assets/images/bumper.png")
-.load(setup);
+loadAssets();
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -173,17 +147,18 @@ function setup() {
     app.stage.addChild(background);
 
     // Spawn bumpers
-    spawnBumpers();
+    GO.spawnBumpers();
 
-    //Make the trees
-    spawnTrees();
+    // Spawn surrounding terrain
+    GO.spawnTerrain();
 
     // Add character sprite
-    spawnCharacter();
+    GO.spawnCharacter();
 
     // Adds health bar
     createHealthBar();
 
+    // Create key press events
     keys.setup();
 }
 
@@ -201,9 +176,8 @@ function play(delta) {
         if (activeWaveCount != waves[waveIndex] && spawnEnemy) {
             // Spawn scroll based on spawn times
             if (scrollTimer >= scrollSpawn) {
-                spawnScroll();
+                GO.spawnScroll();
                 activeWaveCount++;
-                console.log("Scrolls: " + activeWaveCount);
             }
         }
         else {
@@ -328,87 +302,6 @@ function play(delta) {
     });
 }
 
-/********************/
-/* Spawns Character */
-/********************/
-function spawnCharacter() {
-    character = new PIXI.Sprite(PIXI.loader.resources["assets/images/character.png"].texture);
-    character.x = scale(430);
-    character.y = scale(430);
-    character.scale.x = scale(1);
-    character.scale.y = scale(1);
-    app.stage.addChild(character);
-}
-
-/*******************/
-/* Spawns Scroll   */
-/*******************/
-let flipper = 0;
-function spawnScroll() {
-    // Reset the scroll timer
-    scrollTimer = 0;
-
-    // Load resources and create sprite
-    sheet = PIXI.loader.resources["assets/images/scroll.json"].spritesheet;
-    sheet = PIXI.loader.resources["assets/images/scroll.json"].spritesheet;
-    scroll = new PIXI.extras.AnimatedSprite(sheet.animations["scroll"]);
-
-    // Scale scroll to correct size
-    scroll.scale.x = scale(0.3);
-    scroll.scale.y = scale(0.3);
-
-    if (flipper == 0) {
-        // Spawn location
-        scroll.x = scale(0);
-        scroll.y = scale(415);
-
-        // Initial speeds
-        scroll.vx = scale(scrollSpeed);
-        scroll.vy = 0;
-    }
-    if (flipper == 1) {
-        // Spawn location
-        scroll.x = background.width / 2 - scale(30);
-        scroll.y = 0;
-
-        // Initial speeds
-        scroll.vx = 0;
-        scroll.vy = scale(scrollSpeed);
-    }
-    if (flipper == 2) {
-        // Spawn location
-        scroll.x = background.width - scale(50);
-        scroll.y = scale(415);
-
-        // Initial speeds
-        scroll.vx = scale(-(scrollSpeed));
-        scroll.vy = 0;
-    }
-    if (flipper == 3) {
-        // Spawn location
-        scroll.x = background.width / 2 - scale(30);
-        scroll.y = background.height  - scale(60);
-
-        // Initial speeds
-        scroll.vx = 0;
-        scroll.vy = scale(-(scrollSpeed));
-    }
-
-    // Start the animation
-    scroll.animationSpeed = 0.3;
-    scroll.play();
-
-    // Store scroll into the collection
-    scrolls.push(scroll);
-
-    // Add to the scene
-    app.stage.addChild(scroll);
-
-    flipper++;
-    if (flipper == 4)
-        flipper = 0;
-}
-
 /*********************/
 /* Create Health Bar */
 /*********************/
@@ -435,219 +328,20 @@ function createHealthBar() {
     healthBar.outer = outerBar;
 }
 
-/*********************/
-/* Spawn Bumpers     */
-/*********************/
-function spawnBumpers() {
-    // Left Side
-    createBumper("up", 160, 465);
-    createBumper("right", 115, 300);
-    createBumper("down", 295, 350);
-    createBumper("right", 245, 500);
-
-    // Right Side
-    createBumper("down", 735, 415);
-    createBumper("left", 780, 570);
-    createBumper("up", 605, 530);
-    createBumper("left", 650, 370);
-}
-
-function createBumper(direction, x, y) {
-    bumper = new PIXI.Sprite(PIXI.loader.resources["assets/images/bumper.png"].texture);
-    bumper.x = scale(x);
-    bumper.y = scale(y);
-    bumper.scale.x = scale(1);
-    bumper.scale.y = scale(1);
-    app.stage.addChild(bumper);
-    bumperObject = new Bumper(bumper, direction);
-    bumpers.push(bumperObject);
-}
-
-/*********************/
-/* Spawn Trees       */
-/*********************/
-function spawnTrees() {
-    randomRock = randomInt(1, 7);
-    x = 0;
-    y = 0;
-    // Q1
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 30);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
-    }
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 210 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
-    }
-
-    x = 500;
-    // Q2
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
-    }
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 100 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
-    }
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 250 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
-    }
-    x = 600;
-    for (i = 0; i < 5; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(330 + y, 340 + y));
-    }
-
-    x = 0;
-    y = 500;
-    // Q3
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 6; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 30 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(0 + y, 30 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
-    }
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 250 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(320 + y, 330 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(370 + y, 380 + y));
-    }
-
-    x = 500;
-    y = 500;
-    // Q4
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(70 + y, 80 + y));
-    }
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 150 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(120 + y, 130 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(170 + y, 180 + y));
-    }
-    randomRock = randomInt(1, 7);
-    for (i = 0; i < 7; i++) {
-        if (i == randomRock)
-            spawnRock((randomInt(60, 65) * i) + x, 250 + y);
-        else
-            spawnTree((randomInt(60, 65) * i) + x, randomInt(220 + y, 230 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(270 + y, 280 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(320 + y, 330 + y));
-    }
-    for (i = 0; i < 7; i++) {
-        spawnTree((randomInt(60, 65) * i) + x, randomInt(370 + y, 380 + y));
-    }
-
-    spawnTree(20, 350);
-    spawnTree(180, 420);
-    spawnTree(315, 350);
-
-    spawnTree(585, 500);
-    spawnTree(720, 420);
-    spawnTree(850, 500);
-}
-
-/*********************/
-/* Spawn Tree        */
-/*********************/
-function spawnTree(x, y) {
-    sheet = PIXI.loader.resources["assets/images/tree.json"].spritesheet;
-    tree = new PIXI.extras.AnimatedSprite(sheet.animations.tree);
-    
-    tree.scale.x = scale(0.8);
-    tree.scale.y = scale(0.8);
-
-    tree.x = scale(x);
-    tree.y = scale(y);
-
-    tree.animationSpeed = 0.1;
-    
-    setTimeout(function(tree){
-        tree.play();
-    }, randomInt(1, 200), tree);
-
-    app.stage.addChild(tree);
-}
-
-/*********************/
-/* Spawn Rock        */
-/*********************/
-function spawnRock(x, y) {
-    sheet = PIXI.loader.resources["assets/images/rock.json"].spritesheet;
-    rock = new PIXI.extras.AnimatedSprite(sheet.animations.rock);
-    
-    rock.scale.x = scale(0.1);
-    rock.scale.y = scale(0.1);
-
-    rock.x = scale(x);
-    rock.y = scale(y);
-
-    rock.animationSpeed = 0.05;
-    
-    setTimeout(function(rock){
-        rock.play();
-    }, randomInt(1, 200), rock);
-
-    app.stage.addChild(rock);
+function loadAssets() {
+    PIXI.loader
+    .add("assets/images/map.png")
+    .add("assets/images/tree.png")
+    .add("assets/images/tree.json")
+    .add("assets/images/scroll.png")
+    .add("assets/images/scroll.json")
+    .add("assets/images/rock.png")
+    .add("assets/images/rock.json")
+    .add("assets/images/swordLeft.png")
+    .add("assets/images/swordRight.png")
+    .add("assets/images/swordUp.png")
+    .add("assets/images/swordDown.png")
+    .add("assets/images/character.png")
+    .add("assets/images/bumper.png")
+    .load(setup);
 }

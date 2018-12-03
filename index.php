@@ -9,6 +9,7 @@
     <script src="js/pixi.min.js"></script>
     <script src="js/guiClass.js"></script>
     <script src="js/keysClass.js"></script>
+    <script src="js/gameObjectClass.js"></script>
     <script src="js/mechanics.js"></script>
     
     <body>
