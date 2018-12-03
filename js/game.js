@@ -441,10 +441,10 @@ function play(delta) {
 /********************/
 function spawnCharacter() {
     character = new PIXI.Sprite(PIXI.loader.resources["assets/images/character.png"].texture);
-    character.x = scale(440);
+    character.x = scale(430);
     character.y = scale(430);
-    character.scale.x = scale(0.4);
-    character.scale.y = scale(0.4);
+    character.scale.x = scale(1);
+    character.scale.y = scale(1);
     app.stage.addChild(character);
 }
 
