@@ -1,5 +1,5 @@
 <style>
-    * { padding: 0; margin: 0; overflow:hidden; }
+    * { padding: 0; margin: 0;}
     html,body {
         height: 100%;
     }
@@ -9,11 +9,14 @@
     .card {
         margin-top: 2rem;
     }
+    .hideOverflow {
+        overflow:hidden;
+    }
 </style>
 
 <div class="container-fluid h-100" style="margin: 0; padding: 0;">
     <div class="row h-100" style="margin: 0; padding: 0;">
-        <div id="game" class="col h-100" style="margin: 0; padding: 0;">
+        <div id="game" class="col h-100 hideOverflow" style="margin: 0; padding: 0;">
                 <script src="js/game.js"></script>
         </div>
         <div class="col h-100">
@@ -85,17 +88,26 @@
                 <h5 class="card-header">Credits</h5>
                 <div class="card-body">
                     <p class="card-text">
-                        <b>Programming/Game Design/Art</b>
-                        <br>
-                        Stephen Floyd
-                        <br><br>
-                        <b>Hero Art</b>
-                        <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <b>Programming/Game Design/Art</b>
+                            <br>
+                            Stephen Floyd
+                            <br><br>
+                            <b>Hero Art</b>
+                            <br>
                             Rox
-                        <br><br>
-                        <b>Music</b>
-                        <br>
-                        Aaron Brickle
+                        </div>
+                        <div class="col">
+                            <b>Music</b>
+                            <br>
+                            <i>Title Theme</i> - Composed by Aaron Brickle
+                            <br>
+                            <i>"When the Saints Go Marching In"</i> - Composed by William Floyd
+                        </div>
+                    </div>
+                        
+                        
                     </p>
                 </div>
             </div>
