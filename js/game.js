@@ -48,6 +48,7 @@ $(document).ready(function() {
             gui.updateKillPoints();
 
             armour += 3;
+            gui.updateArmour();
 
             gui.checkShop();
         }

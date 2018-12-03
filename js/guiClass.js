@@ -4,6 +4,7 @@ function GUI() {}
 // Setup GUI components
 GUI.prototype.setup = function() {
     this.updateHealth();
+    this.updateArmour();
     this.updateKillPoints();
 
     $( "#armourCost" ).html(armourCost);
@@ -15,6 +16,11 @@ GUI.prototype.setup = function() {
 // Update health stats
 GUI.prototype.updateHealth = function() {
     $('#health').html(characterHealth + "/" + health);
+};
+
+// Update armour stats
+GUI.prototype.updateArmour = function() {
+    $('#armour').html(armour);
 };
 
 // Update kill points
