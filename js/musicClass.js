@@ -1,4 +1,5 @@
 let player;
+let muted = false;
 let trackIndex = 1;
 let tracks = [];
 
@@ -10,6 +11,8 @@ function Music() {
 Music.prototype.playMusic = function() {
     player = new Audio(tracks[trackIndex]);
     player.play();
+    player.muted = muted;
+    
     player.volume = 0.5;
 
     player.onended = function() {
@@ -24,6 +27,7 @@ Music.prototype.playMusic = function() {
 Music.prototype.playSong = function(index) {
     player = new Audio(tracks[index]);
     player.play();
+    player.muted = muted;
 
     player.onended = function() {
         music.playSong(index);
@@ -35,10 +39,14 @@ Music.prototype.stopSong = function() {
 };
 
 Music.prototype.toggleMute = function() {
-    if (player.muted == false)
+    if (player.muted == false) {
         player.muted = true;
-    else
+        muted = true;
+    }
+    else {
         player.muted = false;
+        mute = false;
+    }
 
     if ($( "#mute" ).hasClass("mdi-volume-high")) {
         $( "#mute" ).removeClass("mdi-volume-high");
