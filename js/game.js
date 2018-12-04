@@ -1,93 +1,76 @@
 // Flags
-let dead = false;
-let spawnEnemy = false;
+let dead = false;           // Is character dead flag
+let spawnEnemy = false;     // Continuing spawning enemeies flag
 
 // Globals
-let background;
-let healthBar;
-let baseSize = 948;
-let scalePercent;
+let background;             // Background sprite
+let healthBar;              // Health bar
+let baseSize = 948;         // Base game dimension, used for scaling calculations
+let scalePercent;           // Scale percentage (calculated later)
 let gui = new GUI();        // GUI control object
 let keys = new Keys();      // Key press event object
 let GO = new GameObject();  // Game object spawning object
-let music = new Music();
+let music = new Music();    // Music control object
 
+/*********************/
+/* Elements Info     */
+/*********************/
 // Character info
-let health = 100;
-let killPoints = 0;
-let character;
-let characterHealth = health;
-let healthPlus = 0;
-let armour = 0;
+let health = 100;               // Character base health
+let killPoints = 0;             // Kill point tally
+let character;                  // Character sprite
+let characterHealth = health;   // Character running health and init with base health
+let armour = 0;                 // Bought armour
 
 // Scrolls info
-let scrollAttack = 10;
-let scrollSpeed = 0.6;
-let scrolls = [];       // Array to hold all active scrolls
-let scrollTimer = 0;    // Timer to track when to spawn
-let scrollSpawn = 100;  // 300 = 5 seconds
-let waves = [0, 20, 30];
-let waveIndex = 0;
-let activeWaveCount = 0;
+let scrollAttack = 10;      // Scroll damage amount
+let scrollSpeed = 0.6;      // Scroll movement speed
+let scrolls = [];           // Array to hold all active scrolls
+let scrollTimer = 0;        // Timer to track when to spawn
+let scrollSpawn = 100;      // 300 = 5 seconds
+let waves = [0, 20, 30];    // # of scrolls to spawn on each wave
+let waveIndex = 0;          // Current wave index (init to 0 for no scrolls)
+let activeWaveCount = 0;    // Tally of scrolls spawned for that wave (used to check if total has been reached)
 $(document).ready(function() {
+    // Spawn wave click event
     $( "#spawnWave" ).click(function() {
+        // Toggle spawning flag and move index to first wave #
         spawnEnemy = true;
         waveIndex++;
 
-        // Switch music playing to in-game
+        // Switch from title music to in-game music
         music.stopSong();
         music.playMusic();
     });
 });
 
 // Bumper info
-let bumpers = [];
+let bumpers = [];   // Array to hold all bumpers
 
 // Shop info
-let armourCost = 20;
-let healthCost = 30;
-$(document).ready(function() {
-    $( "#buyArmour" ).click(function() {
-        if (killPoints >= armourCost) {
-            killPoints -= armourCost;
-            gui.updateKillPoints();
+let armourCost = 20;    // Armour cost in KP for shop
+let healthCost = 30;    // Health cost in KP for shop
 
-            armour += 3;
-            gui.updateArmour();
+/*********************/
+/* Hit Class         */
+/*********************/
+let hits = [];      // Array to hold active hits
+let hitBoxes = [];  // Array to hold attack hit boxes
 
-            gui.checkShop();
-        }
-    });
-    $( "#buyHealth" ).click(function() {
-        if (killPoints >= healthCost) {
-            killPoints -= healthCost;
-            gui.updateKillPoints();
-
-            health += 30;
-
-            characterHealth = health;
-            gui.resetHealth();
-            gui.checkShop();
-        }
-    });
-});
-
-//////////////////
-
-let hits = [];
-let hitBoxes = [];
-
+// Hit Class
 function Hit(sprite, direction) {
-    this.sprite = sprite;
-    this.direction = direction;
+    this.sprite = sprite;       // Sprite property
+    this.direction = direction; // Direction property
 }
 
+// Get sprite property
 Hit.prototype.getSprite = function(){
     return this.sprite;
-}
+};
+// Get direction property
 Hit.prototype.getDirection = function(){
     return this.direction;
-}
+};
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -132,6 +115,9 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
+/*********************/
+/* Setup Game        */
+/*********************/
 function setup() {
     //Set the game state
     state = play;
@@ -139,7 +125,7 @@ function setup() {
     //Pixi's `ticker` and providing it with a `delta` argument.
     app.ticker.add(delta => gameLoop(delta));
 
-    // Add background
+    // Add background image
     background = new PIXI.Sprite(PIXI.loader.resources["assets/images/map.png"].texture);
     background.height = window.innerHeight;
     background.width = background.height;
@@ -174,47 +160,57 @@ function setup() {
     keys.setup();
 }
 
+/*********************/
+/* Game Loop         */
+/*********************/
 function gameLoop(delta) {
     //Update the current game state:
     state(delta);
 }
 
+/*********************/
+/* Main Game Loop    */
+/*********************/
 function play(delta) {
     // Update 
     scrollTimer += delta;
 
     // Spawn scrolls if player isn't dead
     if (!dead) {
+        // If we have not reached the total for current wave and spawning is enabled, spawn enemy
         if (activeWaveCount != waves[waveIndex] && spawnEnemy) {
             // Spawn scroll based on spawn times
             if (scrollTimer >= scrollSpawn) {
-                GO.spawnScroll();
-                activeWaveCount++;
+                GO.spawnScroll();   // Spawn scroll
+                activeWaveCount++;  // Increment active wave count
             }
         }
+        // If active wave tally reaches wave total or spawning disabled, stop spawning
         else {
-            spawnEnemy = false;
-            activeWaveCount = 0;
+            spawnEnemy = false;     // Disable wave spawning
+            activeWaveCount = 0;    // Reset active wave count
 
+            // If no scrolls are present on map
             if (scrolls.length == 0) {
-                characterHealth = health;
-                gui.updateHealth();
+                characterHealth = health;   // Reset character health
+                gui.updateHealth();         // Visually update character health
             }
         }
     }
 
     // Hits hitbox handling
     if (hitBoxes.length != 0) {
-        hit = hitBoxes[0];
+        hit = hitBoxes[0]; // Extract active attack hitbox
         // Left
         if (keyPressed[0]) {
+            // Limit hitbox scaling to match animation
             if (hitBoxScale < 2.5) {
                 // x shifting because of anchor points
                 hit.x -= 2.5;
                 hitBoxScale += 0.2;
             }
             else {
-                // Remove the hitbox
+                // Remove the hitboxes
                 hitBoxes.forEach(function(hit) {
                     app.stage.removeChild(hit);
                 });
@@ -223,13 +219,14 @@ function play(delta) {
         }
         // Right
         if (keyPressed[2]) {
+            // Limit hitbox scaling to match animation
             if (hitBoxScale < 1.5) {
                 // Scale x shifting since right in stable
                 hit.scale.x += 0.1;
                 hitBoxScale += 0.1;
             }
             else {
-                // Remove the hitbox
+                // Remove the hitboxes
                 hitBoxes.forEach(function(hit) {
                     app.stage.removeChild(hit);
                 });
@@ -240,12 +237,15 @@ function play(delta) {
 
     // Hits animation handling
     if (hits.length != 0) {
-        hit = hits[0];
-        hitSprite = hit.getSprite();
+        hit = hits[0];                  // Extract active attack animation
+        hitSprite = hit.getSprite();    // Extract animation sprite
+        // If attacking left
         if (hit.getDirection() == "left") {
+            // Limit rotation
             if (hitSprite.rotation > -1.5) {
-                hitSprite.rotation -= 0.1;
+                hitSprite.rotation -= 0.1; // Rotate sprite
             }
+            // If rotation complete
             else {
                 // Remove the animation
                 hits.forEach(function(hit) {
@@ -254,10 +254,13 @@ function play(delta) {
                 hits = [];
             }
         }
+        // If attacking right
         if (hit.getDirection() == "right") {
+            // Limit rotation
             if (hitSprite.rotation < 1.5) {
-                hitSprite.rotation += 0.1;
+                hitSprite.rotation += 0.1; // Rotate sprite
             }
+            // If rotation complete
             else {
                 // Remove the animation
                 hits.forEach(function(hit) {
@@ -267,19 +270,18 @@ function play(delta) {
             }
         }
     }
-    
 
+    // Check all scrolls for conditions
     scrolls.forEach(function(scroll) {
         // Run if player isn't dead
         if (!dead) {
-            //console.log(scroll.x)
             //Move the scroll
             scroll.x += scroll.vx;
             scroll.y += scroll.vy;
-            
-            //console.log(scroll.y);
 
+            // Check if scroll has hit any bumper
             bumpers.forEach(function(bumper) {
+                // Check for collision and change scroll direction based on bumper direction
                 if ( hitTestRectangle(scroll, bumper.getSprite()) ) {
                     if (bumper.getDirection() == "up") {
                         scroll.vx = 0;
@@ -300,14 +302,17 @@ function play(delta) {
                 }
             });
 
-            // Scroll death by player
+            // Scroll death by player attack
             if (hitBoxes.length != 0) {
+                // Check all hitboxes
                 hitBoxes.forEach(function(hit) {
+                    // Check if scroll has collided with hitbox
                     if (hitTestRectangle(hit, scroll)) {
                         index = scrolls.indexOf(scroll);    // Locate scroll in question
-                        app.stage.removeChild(scroll);      
+                        app.stage.removeChild(scroll);      // Despawn scroll
+                        // Make sure index is valid
                         if (index > -1) {
-                            scrolls.splice(index, 1); 
+                            scrolls.splice(index, 1); // Remove scroll from active array
                         }
     
                         // Remove animation and hitboxes
@@ -330,6 +335,7 @@ function play(delta) {
             if (hitTestRectangle(scroll, character)) {
                 index = scrolls.indexOf(scroll);    // Locate scroll in question
                 app.stage.removeChild(scroll);      // Despawn scroll
+                // Make sure index is valid
                 if (index > -1) {
                     scrolls.splice(index, 1); // Remove scroll from active array
                 }
@@ -348,7 +354,7 @@ function play(delta) {
         }
 
         // Check for character death
-        if (characterHealth == 0) {
+        if (characterHealth <= 0) {
             dead = true;
         }
     });
@@ -380,6 +386,9 @@ function createHealthBar() {
     healthBar.outer = outerBar;
 }
 
+/*********************/
+/* Load all assets   */
+/*********************/
 function loadAssets() {
     PIXI.loader
     .add("assets/images/map.png")
