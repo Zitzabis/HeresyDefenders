@@ -97,16 +97,22 @@
                 <div class="card-body">
                     <p class="card-text">
                         <div class="row">
-                            <div class="col">
-                            Use your arrow keys to attack enemies.
-                            <br>
-                            <br>
-                            Buying health from the shop will increase your total health bar.
-                            <br>
-                            Buying armour from the shop will cause you to take less damage from enemies. Each point of armour is one point less from attacks.
+                            <div class="col border-right">
+                                <b>Attacking</b>
+                                <br>
+                                Use your arrow keys to attack enemies.
+                                <br>
+                                <br>
+                                <b>Music</b>
+                                <br>
+                                You can mute/unmute the music using the button found in the top-left of the screen.
                             </div>
-                            <div class="col">
-                            You can mute/unmute the music using the button found in the top-left of the screen.
+                            <div class="col border-left">
+                                <b>Shop</b>
+                                <br>
+                                Buying health from the shop will increase your total health bar.
+                                <br>
+                                Buying armour from the shop will cause you to take less damage from enemies. Each point of armour is one point less from attacks.
                             </div>
                         </div>
                     </p>
@@ -117,7 +123,7 @@
                 <div class="card-body">
                     <p class="card-text">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-4 border-right">
                                 <b>Programming/Game Design/Art</b>
                                 <br>
                                 Stephen Floyd
@@ -126,7 +132,7 @@
                                 <br>
                                 Rox
                             </div>
-                            <div class="col">
+                            <div class="col border-left">
                                 <b>Music</b>
                                 <br>
                                 <i>Title Theme</i> - Composed by Aaron Brickle
