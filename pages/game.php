@@ -70,11 +70,15 @@
                                     <p class="card-text">
                                         <div class="row">
                                             <div class="col text-center border-right">
+                                                <img src="assets/images/shield.png" height="100rem">
+                                                <br>
                                                 <span id="armourCost"></span> Kill Points
                                                 <br>
                                                 <button class="btn btn-dark" id="buyArmour">Buy Armour</button>
                                             </div>
                                             <div class="col text-center border-left">
+                                                <img src="assets/images/health.png" height="100rem">
+                                                <br>
                                                 <span id="healthCost"></span> Kill Points
                                                 <br>
                                                 <button class="btn btn-dark" id="buyHealth">Buy Health</button>
@@ -92,15 +96,19 @@
                 <h5 class="card-header">Instructions</h5>
                 <div class="card-body">
                     <p class="card-text">
-                        Use your arrow keys to attack enemies.
-                        <br>
-                        <br>
-                        Buying health from the shop will increase your total health bar.
-                        <br>
-                        Buying armour from the shop will cause you to take less damage from enemies. Each point of armour is one point less from attacks.
-                        <br>
-                        <br>
-                        You can mute/unmute the music using the button found in the top-left of the screen.
+                        <div class="row">
+                            <div class="col">
+                            Use your arrow keys to attack enemies.
+                            <br>
+                            <br>
+                            Buying health from the shop will increase your total health bar.
+                            <br>
+                            Buying armour from the shop will cause you to take less damage from enemies. Each point of armour is one point less from attacks.
+                            </div>
+                            <div class="col">
+                            You can mute/unmute the music using the button found in the top-left of the screen.
+                            </div>
+                        </div>
                     </p>
                 </div>
             </div>
