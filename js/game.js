@@ -75,6 +75,7 @@ $(document).ready(function() {
 //////////////////
 
 let hits = [];
+let hitBoxes = [];
 
 function Hit(sprite, direction) {
     this.sprite = sprite;
@@ -202,6 +203,42 @@ function play(delta) {
         }
     }
 
+    // Hits hitbox handling
+    if (hitBoxes.length != 0) {
+        hit = hitBoxes[0];
+        // Left
+        if (keyPressed[0]) {
+            if (hitBoxScale < 2.5) {
+                // x shifting because of anchor points
+                hit.x -= 2.5;
+                hitBoxScale += 0.2;
+            }
+            else {
+                // Remove the hitbox
+                hitBoxes.forEach(function(hit) {
+                    app.stage.removeChild(hit);
+                });
+                hitBoxes = [];
+            }
+        }
+        // Right
+        if (keyPressed[2]) {
+            if (hitBoxScale < 1.5) {
+                // Scale x shifting since right in stable
+                hit.scale.x += 0.1;
+                hitBoxScale += 0.1;
+            }
+            else {
+                // Remove the hitbox
+                hitBoxes.forEach(function(hit) {
+                    app.stage.removeChild(hit);
+                });
+                hitBoxes = [];
+            }
+        }
+    }
+
+    // Hits animation handling
     if (hits.length != 0) {
         hit = hits[0];
         hitSprite = hit.getSprite();
@@ -210,7 +247,7 @@ function play(delta) {
                 hitSprite.rotation -= 0.1;
             }
             else {
-                // Remove the hitbox
+                // Remove the animation
                 hits.forEach(function(hit) {
                     app.stage.removeChild(hit.getSprite());
                 });
@@ -222,7 +259,7 @@ function play(delta) {
                 hitSprite.rotation += 0.1;
             }
             else {
-                // Remove the hitbox
+                // Remove the animation
                 hits.forEach(function(hit) {
                     app.stage.removeChild(hit.getSprite());
                 });
@@ -264,9 +301,8 @@ function play(delta) {
             });
 
             // Scroll death by player
-            if (hits.length != 0) {
-                hits.forEach(function(hit) {
-                    hit = hit.getSprite();
+            if (hitBoxes.length != 0) {
+                hitBoxes.forEach(function(hit) {
                     if (hitTestRectangle(hit, scroll)) {
                         index = scrolls.indexOf(scroll);    // Locate scroll in question
                         app.stage.removeChild(scroll);      
@@ -274,10 +310,15 @@ function play(delta) {
                             scrolls.splice(index, 1); 
                         }
     
+                        // Remove animation and hitboxes
                         hits.forEach(function(hit) {
                             app.stage.removeChild(hit.getSprite());
                         });
                         hits = [];
+                        hitBoxes.forEach(function(hit) {
+                            app.stage.removeChild(hit);
+                        });
+                        hitBoxes = [];
                         
                         // Increment kill points and publish
                         killPoints++;
@@ -352,6 +393,7 @@ function loadAssets() {
     .add("assets/images/swordRight.png")
     .add("assets/images/swordUp.png")
     .add("assets/images/swordDown.png")
+    .add("assets/images/hit.png")
     .add("assets/images/character.png")
     .add("assets/images/bumper.png")
     .load(setup);
