@@ -62,3 +62,35 @@ GUI.prototype.checkShop = function() {
         $('#buyHealth').addClass("btn-dark");
     }
 };
+
+// Shop click events
+$(document).ready(function() {
+    // Click event for buying armour
+    $( "#buyArmour" ).click(function() {
+        // If enough KP to purchase armour
+        if (killPoints >= armourCost) {
+            killPoints -= armourCost;   // Remove cost from KP total
+            gui.updateKillPoints();     // Visually update KP total
+
+            armour += 3;        // Increment armour total
+            gui.updateArmour(); // Visually update armour total
+
+            gui.checkShop();    // Check if changes need to be made on shop
+        }
+    });
+
+    // Click event for buying health
+    $( "#buyHealth" ).click(function() {
+        // If enough KP to purchase health
+        if (killPoints >= healthCost) {
+            killPoints -= healthCost;   // Remove cost from KP total
+            gui.updateKillPoints();     // Visually update KP total
+
+            health += 30;   // Increment health total
+
+            characterHealth = health;   // Update the running health based on the base health
+            gui.resetHealth();          // Visually update the health total
+            gui.checkShop();            // Check if changes need to be made on shop
+        }
+    });
+});
